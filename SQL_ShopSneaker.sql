@@ -1,30 +1,31 @@
-﻿
 CREATE DATABASE ShopSneaker;
 GO
 
 USE ShopSneaker;
 GO
 
--- Bảng DanhMuc
+-- Bảng DanhMuc (Categories)
 CREATE TABLE DanhMuc (
     MaDanhMuc varchar(10) PRIMARY KEY,
     TenDanhMuc nvarchar(100)
 );
 GO
--- Bảng ThuongHieu
+
+-- Bảng ThuongHieu (Brands)
 CREATE TABLE ThuongHieu (
     MaThuongHieu varchar(10) PRIMARY KEY,
     TenThuongHieu nvarchar(100)
 );
 GO
--- Bảng ChucVu
+
+-- Bảng ChucVu (Positions)
 CREATE TABLE ChucVu (
     MaChucVu varchar(10) PRIMARY KEY,
     TenChucVu nvarchar(100)
 );
 GO
 
--- Bảng NhanVien
+-- Bảng NhanVien (Employees)
 CREATE TABLE NhanVien (
     MaNhanVien varchar(10) PRIMARY KEY,
     HoTen nvarchar(100),
@@ -37,15 +38,14 @@ CREATE TABLE NhanVien (
 );
 GO
 
--- Bảng NhaCungCap
+-- Bảng NhaCungCap (Suppliers)
 CREATE TABLE NhaCungCap (
     MaNhaCungCap varchar(25) PRIMARY KEY,
     TenNhaCungCap nvarchar(100)
 );
 GO
 
--- Bảng SanPham
--- Bảng SanPham
+-- Bảng SanPham (Products)
 CREATE TABLE SanPham (
     MaSanPham varchar(10) PRIMARY KEY,
     MaDanhMuc varchar(10),
@@ -57,22 +57,21 @@ CREATE TABLE SanPham (
     TonKho int CHECK(TonKho >= 0),
     Size decimal(3, 1),
     MauSac nvarchar(50),
-	HinhAnh Nvarchar(255),
+    HinhAnh nvarchar(255),
     FOREIGN KEY (MaDanhMuc) REFERENCES DanhMuc(MaDanhMuc),
     FOREIGN KEY (MaNhaCungCap) REFERENCES NhaCungCap(MaNhaCungCap),
     FOREIGN KEY (MaThuongHieu) REFERENCES ThuongHieu(MaThuongHieu)
 );
 GO
 
-
--- Bảng LoaiTaiKhoan
+-- Bảng LoaiTaiKhoan (Account Types)
 CREATE TABLE LoaiTaiKhoan (
     MaLoaiTaiKhoan varchar(10) PRIMARY KEY,
     TenLoaiTaiKhoan nvarchar(50)
 );
 GO
 
--- Bảng TaiKhoan
+-- Bảng TaiKhoan (Accounts)
 CREATE TABLE TaiKhoan (
     MaNhanVien varchar(10) UNIQUE,
     TenDangNhap nvarchar(100) PRIMARY KEY,
@@ -83,7 +82,7 @@ CREATE TABLE TaiKhoan (
 );
 GO
 
--- Bảng KhachHang
+-- Bảng KhachHang (Customers)
 CREATE TABLE KhachHang (
     MaKhachHang varchar(10) PRIMARY KEY,
     HoTen nvarchar(100),
@@ -93,7 +92,14 @@ CREATE TABLE KhachHang (
 );
 GO
 
--- Bảng HoaDon
+-- Bảng HinhThucThanhToan (Payment Methods)
+CREATE TABLE HinhThucThanhToan (
+    MaHinhThuc varchar(10) PRIMARY KEY,
+    TenHinhThuc nvarchar(50)
+);
+GO
+
+-- Bảng HoaDon (Invoices)
 CREATE TABLE HoaDon (
     MaHoaDon varchar(100) PRIMARY KEY,
     MaNhanVien varchar(10),
@@ -101,12 +107,14 @@ CREATE TABLE HoaDon (
     NgayHoaDon datetime,
     TongTien decimal CHECK(TongTien >= 0),
     TongTienSauGiamGia decimal CHECK(TongTienSauGiamGia >= 0),
+    MaHinhThucThanhToan varchar(10),
     FOREIGN KEY (MaNhanVien) REFERENCES NhanVien(MaNhanVien),
-    FOREIGN KEY (MaKhachHang) REFERENCES KhachHang(MaKhachHang)
+    FOREIGN KEY (MaKhachHang) REFERENCES KhachHang(MaKhachHang),
+    FOREIGN KEY (MaHinhThucThanhToan) REFERENCES HinhThucThanhToan(MaHinhThuc)
 );
 GO
 
--- Bảng PhieuNhap
+-- Bảng PhieuNhap (Purchase Orders)
 CREATE TABLE PhieuNhap (
     MaPhieuNhap varchar(100) PRIMARY KEY,
     MaNhanVien varchar(10),
@@ -116,7 +124,7 @@ CREATE TABLE PhieuNhap (
 );
 GO
 
--- Bảng ChiTietHoaDon
+-- Bảng ChiTietHoaDon (Invoice Details)
 CREATE TABLE ChiTietHoaDon (
     MaSanPham varchar(10),
     MaHoaDon varchar(100),
@@ -128,7 +136,7 @@ CREATE TABLE ChiTietHoaDon (
 );
 GO
 
--- Bảng ChiTietPhieuNhap
+-- Bảng ChiTietPhieuNhap (Purchase Order Details)
 CREATE TABLE ChiTietPhieuNhap (
     MaSanPham varchar(10),
     MaPhieuNhap varchar(100),
@@ -140,18 +148,18 @@ CREATE TABLE ChiTietPhieuNhap (
 );
 GO
 
--- Bảng PhieuGiamGia (Voucher)
+-- Bảng PhieuGiamGia (Vouchers)
 CREATE TABLE PhieuGiamGia (
     MaPhieuGiamGia varchar(20) PRIMARY KEY,
     TenPhieuGiamGia nvarchar(100),
     GiaTri decimal(5,2) CHECK(GiaTri >= 0),
-    LoaiGiamGia nvarchar(10) CHECK(LoaiGiamGia IN ('TIEN', 'PERCENT')), -- TIEN = giảm theo số tiền, PERCENT = giảm theo phần trăm
+    LoaiGiamGia nvarchar(10) CHECK(LoaiGiamGia IN ('TIEN', 'PERCENT')),
     NgayBatDau datetime,
     NgayKetThuc datetime
 );
 GO
 
--- Bảng ChiTietPhieuGiamGia (Chi tiết voucher áp dụng cho đơn hàng)
+-- Bảng ChiTietPhieuGiamGia (Voucher Details)
 CREATE TABLE ChiTietPhieuGiamGia (
     MaHoaDon varchar(100),
     MaPhieuGiamGia varchar(20),
