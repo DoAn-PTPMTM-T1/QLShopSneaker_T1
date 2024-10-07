@@ -45,11 +45,10 @@ CREATE TABLE NhaCungCap (
 );
 GO
 
-
 CREATE TABLE SanPham (
     MaSanPham varchar(10) PRIMARY KEY,
     MaDanhMuc varchar(10),
-    MaNhaCungCap varchar(25),
+   
     MaThuongHieu varchar(10),
     TenSanPham nvarchar(100),
     MoTa nvarchar(100),
@@ -59,11 +58,18 @@ CREATE TABLE SanPham (
     MauSac nvarchar(50),
     HinhAnh nvarchar(255),
     FOREIGN KEY (MaDanhMuc) REFERENCES DanhMuc(MaDanhMuc),
-    FOREIGN KEY (MaNhaCungCap) REFERENCES NhaCungCap(MaNhaCungCap),
     FOREIGN KEY (MaThuongHieu) REFERENCES ThuongHieu(MaThuongHieu)
 );
 GO
-
+CREATE TABLE CUNGUNG(
+    MaNCC varchar(25),
+    MaSP varchar(10),
+    TrangThai bit,
+    PRIMARY KEY (MaNCC,MaSP),
+    FOREIGN KEY (MaNCC) REFERENCES NhaCungCap(MaNhaCungCap),
+    FOREIGN KEY (MaSP) REFERENCES SanPham(MaSanPham)
+)
+GO
 
 CREATE TABLE LoaiTaiKhoan (
     MaLoaiTaiKhoan varchar(10) PRIMARY KEY,
