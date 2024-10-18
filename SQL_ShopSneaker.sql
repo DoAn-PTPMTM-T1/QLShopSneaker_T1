@@ -24,7 +24,11 @@ CREATE TABLE ChucVu (
     TenChucVu nvarchar(100)
 );
 GO
-
+CREATE TABLE LoaiTaiKhoan (
+    MaLoaiTaiKhoan varchar(10) PRIMARY KEY,
+    TenLoaiTaiKhoan nvarchar(50)
+);
+GO
 
 CREATE TABLE NhanVien (
     MaNhanVien varchar(10) PRIMARY KEY,
@@ -33,8 +37,11 @@ CREATE TABLE NhanVien (
     Email nvarchar(100),
     DiaChi nvarchar(100),
     SoCMND nvarchar(100) UNIQUE,
+    MatKhau nvarchar(100) NOT NULL,
+    MaLoaiTaiKhoan varchar(10),
     MaChucVu varchar(10),
-    FOREIGN KEY (MaChucVu) REFERENCES ChucVu(MaChucVu)
+    FOREIGN KEY (MaChucVu) REFERENCES ChucVu(MaChucVu),
+    FOREIGN KEY (MaLoaiTaiKhoan) REFERENCES LoaiTaiKhoan(MaLoaiTaiKhoan)
 );
 GO
 
@@ -48,7 +55,6 @@ GO
 CREATE TABLE SanPham (
     MaSanPham varchar(10) PRIMARY KEY,
     MaDanhMuc varchar(10),
-   
     MaThuongHieu varchar(10),
     TenSanPham nvarchar(100),
     MoTa nvarchar(100),
@@ -71,22 +77,10 @@ CREATE TABLE CUNGUNG(
 )
 GO
 
-CREATE TABLE LoaiTaiKhoan (
-    MaLoaiTaiKhoan varchar(10) PRIMARY KEY,
-    TenLoaiTaiKhoan nvarchar(50)
-);
-GO
 
 
-CREATE TABLE TaiKhoan (
-    MaNhanVien varchar(10) UNIQUE,
-    TenDangNhap nvarchar(100) PRIMARY KEY,
-    MatKhau nvarchar(100) NOT NULL,
-    MaLoaiTaiKhoan varchar(10),
-    FOREIGN KEY (MaNhanVien) REFERENCES NhanVien(MaNhanVien),
-    FOREIGN KEY (MaLoaiTaiKhoan) REFERENCES LoaiTaiKhoan(MaLoaiTaiKhoan)
-);
-GO
+
+
 
 
 CREATE TABLE KhachHang (
