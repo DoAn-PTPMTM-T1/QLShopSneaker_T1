@@ -48,7 +48,10 @@ GO
 
 CREATE TABLE NhaCungCap (
     MaNhaCungCap varchar(25) PRIMARY KEY,
-    TenNhaCungCap nvarchar(100)
+    TenNhaCungCap nvarchar(100),
+    DienThoai varchar(10),
+    Email varchar(20),
+    Diachi nvarchar(100)
 );
 GO
 
