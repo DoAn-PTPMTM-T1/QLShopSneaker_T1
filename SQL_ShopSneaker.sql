@@ -121,9 +121,11 @@ GO
 CREATE TABLE PhieuNhap (
     MaPhieuNhap varchar(100) PRIMARY KEY,
     MaNhanVien varchar(10),
+    MaNhaCungCap varchar(25)
     NgayPhieuNhap datetime,
     TongTien decimal CHECK(TongTien >= 0),
-    FOREIGN KEY (MaNhanVien) REFERENCES NhanVien(MaNhanVien)
+    FOREIGN KEY (MaNhanVien) REFERENCES NhanVien(MaNhanVien),
+    FOREIGN KEY (MaNhaCungCap) REFERENCES NhaCungCap(MaNhaCungCap)
 );
 GO
 
