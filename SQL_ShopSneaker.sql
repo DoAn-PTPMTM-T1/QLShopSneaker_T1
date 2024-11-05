@@ -134,6 +134,7 @@ CREATE TABLE ChiTietHoaDon (
     MaHoaDon varchar(100),
     SoLuong int CHECK(SoLuong >= 0),
     Gia decimal(10,2) CHECK (Gia >= 0),
+    Thanhtien decimal(10,2),
     PRIMARY KEY (MaSanPham, MaHoaDon),
     FOREIGN KEY (MaSanPham) REFERENCES SanPham(MaSanPham),
     FOREIGN KEY (MaHoaDon) REFERENCES HoaDon(MaHoaDon)
